@@ -463,7 +463,7 @@ def create_experiment_dir(checkpoint_dir: pathlib.Path,
         json.dump(obj=all_arguments, fp=handle, indent=2)
     # Save the git hash
     try:
-        gitlog = sh.git.log("-1", format="%H", _tty_out=False, _fg=False)
+        gitlog = str(sh.git.log("-1", format="%H", _tty_out=False, _fg=False).stdout.strip())
         with (exp_dir / "githash.log").open("w") as handle:
             handle.write(gitlog)
     except sh.ErrorReturnCode_128:
@@ -474,7 +474,7 @@ def create_experiment_dir(checkpoint_dir: pathlib.Path,
                     " version control.")
     # And the git diff
     try:
-        gitdiff = sh.git.diff(_fg=False, _tty_out=False)
+        gitdiff = str(sh.git.diff(_fg=False, _tty_out=False).stdout.strip())
         with (exp_dir / "gitdiff.log").open("w") as handle:
             handle.write(gitdiff)
     except sh.ErrorReturnCode_129:
